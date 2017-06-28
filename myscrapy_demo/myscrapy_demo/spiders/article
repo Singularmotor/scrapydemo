@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="gb2312" />
+<meta name="applicable-device" content="pc">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+<title>Python中操作mysql的pymysql模块详解_python_脚本之家</title>
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+<meta name="keywords" content="python,mysql,pymysql,python,pymysql操作,python,pymysql用法,python,pymysql,安装" />
+<meta name="description" content="这篇文章给大家演示了如何安装以及使用Python中操作mysql的pymysql模块，本文介绍的很详细，对大家学习Python具有一定参考借鉴价值，有需要的朋友们一起来看看吧。" />
+<link rel="alternate" media="only screen and(max-width: 640px)" href="http://m.jb51.net/article/92516.htm" />
+<meta http-equiv="mobile-agent" content="format=html5; url=http://m.jb51.net/article/92516.htm" />
+<meta http-equiv="mobile-agent" content="format=xhtml; url=http://m.jb51.net/article/92516.htm" />
+<script type="text/javascript">
+var tougao="daisy";var lmname="python";
+(function(){var reWriteUrl=function(url){if(url){var Splits=url.split("/"),siteName=window.location.pathname;if(typeof siteName!=="undefined"){return "http://m.jb51.net"+siteName}}};if(/Android|webOS|iPhone|iPad|Windows Phone|iPod|BlackBerry|SymbianOS|Nokia|Mobile/i.test(navigator.userAgent)){var url=window.location.href;var pathname=window.location.pathname;if(url.indexOf("?pc")<0){try{window.location.href=reWriteUrl(url)}catch(e){}}}})();
+</script>
+<link type="text/css" href="/skin/2016/base.css" rel="stylesheet" />
+<link type="text/css" href="/skin/2016/common.css" rel="stylesheet" />
+<script type="text/javascript" src="http://common.jb51.net/jslib/jquery/jquery.min.js"></script>
+<script type=text/javascript src="/js/function.js"></script>
+</head>
+<body>
+<!--head Star -->
+<div id="head">
+  <div class="toolBar">
+  <div class="main">
+    <!--topNav Star -->
+    <div class="topNav clearfix">
+      <ul class="navList fl">
+        <li>
+          <div class="one"><a href="http://www.jb51.net" target="_blank">脚本之家</a></div>
+        </li>
+        <li>
+          <div class="one"><a href="http://www.jb51.net/softs/" target="_blank">软件下载<i class="icon"></i></a></div>
+          <div class="two">
+<a href="/softs/android.html" target="_blank">android软件</a> <a href="/softs/mac.html" target="_blank">MAC软件</a> <a href="/qudong/" target="_blank">驱动下载</a> <a href="/fonts/" target="_blank">字体下载</a> <a href="/dll/" target="_blank">DLL下载</a> </div>
+</li>
+        <li>
+          <div class="one"><a href="/codes/" target="_blank">源码下载<i class="icon"></i></a></div>
+          <div class="two"> <a href="/codes/asp.html" target="_blank">asp源码</a> <a href="/codes/php.html" target="_blank">php源码</a> <a href="/codes/aspnet.html" target="_blank">asp.net源码</a> <a href="/codes/jsp.html" target="_blank">jsp源码</a> <a href="/codes/editor.html" target="_blank">网页编辑器</a> <a href="/codes/list123_1.html" target="_blank">数据库管理</a> <a href="/codes/list124_1.html" target="_blank">常用组件</a> <a href="/jiaoben/" target="_blank">脚本下载</a></div>
+        </li>
+        <li>
+          <div class="one"><a href="http://tools.jb51.net" target="_blank">在线工具<i class="icon"></i></a></div>
+          <div class="two"> <a href="/shouce/" target="_blank">在线手册</a> <a href="/tools/cssyasuo.shtml" target="_blank">CSS格式化</a> <a href="http://tools.jb51.net/code/js" target="_blank">JS格式化</a> <a href="/tools/html-js.htm" target="_blank">Html转化为Js</a> <a href="http://tools.jb51.net/regex/javascript" target="_blank">js正则表达式</a>
+</div>
+        </li>
+        <li>
+          <div class="one"><a href="/w3school/" target="_blank">网页教程基础</a></div>
+        </li>
+			<li>
+          <div class="one"><a href="http://s.jb51.net" target="_blank">服务器常用软件</a></div>
+        </li>
+		<li>
+          <div class="one"><a href="http://m.jb51.net" target="_blank">手机版</a></div>
+          <div class="two"><img src="http://files.jb51.net/images/m.jb51.net.png" data-baiduimageplus-ignore /></div>     
+        </li>
+        <li class="watch">
+          <div class="one"><a href="http://www.jb51.net/about.htm" target="_blank" rel="nofollow" ><i class="icon"></i>关注微信</a></div>
+          <div class="two"><img src="http://files.jb51.net/images/weixin_200.gif" data-baiduimageplus-ignore /></div>
+        </li>
+      </ul>
+      <div class="navUser mt5 fr" id="jb51_topbar" >
+
+      </div>
+    </div>
+    <!--topNav End -->
+  </div>
+</div>
+
+  <div class="main clearfix">
+    <div class="mtb10 clearfix">
+      <div class="logo"><a href="http://www.jb51.net/"><img src="http://www.jb51.net/images/logo.gif" title="脚本之家" alt="脚本之家" /></a></div>
+      <div class="logom fl"><span id="logo_m" class="jbTestPos"></span></div>
+      <div class="logor fr"><span id="logo_r" class="jbTestPos"></span></div>
+    </div>
+<!-- 导航-->
+<DIV class="nav_top clearfix">
+<UL>
+<li><a href="http://www.jb51.net/web/">网页制作</a></li>
+<li><a href="http://www.jb51.net/list/index_1.htm">网络编程</a></li>
+<li><a href="http://www.jb51.net/list/index_96.htm">脚本专栏</a></li>
+<li><a href="http://www.jb51.net/jiaoben/">脚本下载</a></li>
+<li><a href="http://www.jb51.net/list/index_104.htm">数据库</a></li>
+<li><a href="http://www.jb51.net/cms/">CMS教程</a></li>
+<li><a href="http://www.jb51.net/books/">电子书籍</a></li>
+<li><a href="http://www.jb51.net/pingmian/">平面设计</a></li>
+<li><a href="http://www.jb51.net/media/">媒体动画</a></li>
+<li><a href="http://www.jb51.net/os/">操作系统</a></li>
+<li><a href="http://www.jb51.net/yunying/">网站运营</a></li>
+<li><a href="http://www.jb51.net/hack/">网络安全</a></li>
+<li class="last"><a href="http://www.jb51.net/shouce/">在线手册</a></li>
+
+</UL>
+</DIV>
+
+<!--导航结束-->
+<div class="subnav clearfix">
+<ul><li><a href='/list/list_114_1.htm' title="vbs">vbs</a></li>
+<li><a href='/list/list_106_1.htm' title="DOS/BAT">DOS/BAT</a></li>
+<li><a href='/list/list_110_1.htm' title="hta">hta</a></li>
+<li><a href='/list/list_111_1.htm' title="htc">htc</a></li>
+<li><a href='/list/list_97_1.htm' title="python">python</a></li>
+<li><a href='/list/list_125_1.htm' title="perl">perl</a></li>
+<li><a href='/list/list_138_1.htm' title="游戏相关">游戏相关</a></li>
+<li><a href='/list/list_161_1.htm' title="VBA">VBA</a></li>
+<li><a href='/list/list_163_1.htm' title="远程脚本">远程脚本</a></li>
+<li><a href='/list/list_178_1.htm' title="ColdFusion">ColdFusion</a></li>
+<li><a href='/list/list_201_1.htm' title="ruby专题">ruby专题</a></li>
+<li><a href='/list/list_213_1.htm' title="autoit">autoit</a></li>
+<li><a href='/list/list_214_1.htm' title="seraphzone">seraphzone</a></li>
+<li><a href='/list/list_234_1.htm' title="PowerShell">PowerShell</a></li>
+<li><a href='/list/list_235_1.htm' title="linux shell">linux shell</a></li>
+<li><a href='/list/list_245_1.htm' title="Lua">Lua</a></li>
+<li><a href='/list/list_246_1.htm' title="Golang">Golang</a></li>
+<li><a href='/list/list_249_1.htm' title="Erlang">Erlang</a></li>
+<li><a href='/list/list_130_1.htm' title="其它">其它</a></li>
+</ul>
+</div>
+<div class="NavBar clearfix ptb10">
+<div class="fl w690">
+<div class="box mb15 mt10"><i class="icon"></i>您的位置：<a href='/'>首页</a> → <a href="/list/index_96.htm" title="脚本专栏">脚本专栏</a> → <a href="/list/list_97_1.htm" title="python">python</a> → 正文内容 Python中操作mysql的pymysql模块</div>
+</div>
+<div class="fr w300"><div class="search">
+<form action="http://so.jb51.net/cse/search" target="_blank">
+    <input type="hidden" name="s" value="10520733385329581432">
+    <input type="hidden" name="ie" value="gbk">
+    <input type="text" name="q" class="key_input" placeholder="请输入关键词">
+    <input type="submit" value="搜索" class="c_btn">
+</form></div></div>
+  </div>
+</div>
+<!--head End -->
+<div class="main mb10 clearfix">
+<div class="clearfix"><span id="tonglan1" class="jbTestPos"></span></div>
+</div>
+
+<!--content Star -->
+<div id="contents">
+ <div class="main clearfix">
+      <div class="w690 fl">
+      <div class="article-content border">
+      <div class="title">
+            <h1 class="YaHei">Python中操作mysql的pymysql模块详解</h1>
+            <p>作者：苍松  字体：[<a href="javascript:turnbig()">增加</a> <a href="javascript:turnsmall()">减小</a>] 类型：转载 时间：2016-09-13<a href="#comments"> 我要评论</a></p>
+        </div>
+        <div class="art_desc mt10"><div id="art_demo">这篇文章给大家演示了如何安装以及使用Python中操作mysql的pymysql模块，本文介绍的很详细，对大家学习Python具有一定参考借鉴价值，有需要的朋友们一起来看看吧。</div></div>
+        <div class="lbd clearfix"><span id="art_up" class="jbTestPos"></span></div>
+        <div id="content">
+<p><span style="color: #ff0000"><strong>前言</strong></span></p>
+<p>pymsql是Python中操作MySQL的模块，其使用方法和MySQLdb几乎相同。但目前pymysql支持python3.x而后者不支持3.x版本。</p>
+<p>本文测试python版本：2.7.11。mysql版本：5.6.24</p>
+<p><span style="color: #ff0000"><strong>一、安装</strong></span></p>
+<div class="jb51code">
+<pre class="brush:py;">
+pip3 install pymysql</pre>
+</div>
+<p><span style="color: #ff0000"><strong>二、使用操作</strong></span></p>
+<p><strong>1、执行SQL</strong></p>
+<div class="jb51code">
+<pre class="brush:py;">
+#!/usr/bin/env pytho
+# -*- coding:utf-8 -*-
+import pymysql
+ 
+# 创建连接
+conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='', db='tkq1', charset='utf8')
+# 创建游标
+cursor = conn.cursor()
+ 
+# 执行SQL，并返回收影响行数
+effect_row = cursor.execute("select * from tb7")
+ 
+# 执行SQL，并返回受影响行数
+#effect_row = cursor.execute("update tb7 set pass = '123' where nid = %s", (11,))
+ 
+# 执行SQL，并返回受影响行数,执行多次
+#effect_row = cursor.executemany("insert into tb7(user,pass,licnese)values(%s,%s,%s)", [("u1","u1pass","11111"),("u2","u2pass","22222")])
+ 
+ 
+# 提交，不然无法保存新建或者修改的数据
+conn.commit()
+ 
+# 关闭游标
+cursor.close()
+# 关闭连接
+conn.close()</pre>
+</div>
+<p><span style="color: #800000">注意：存在中文的时候，连接需要添加charset='utf8'，否则中文显示乱码。</span></p>
+<p><strong>2、获取查询数据</strong></p>
+<div class="jb51code">
+<pre class="brush:py;">
+#! /usr/bin/env python
+# -*- coding:utf-8 -*-
+# __author__ = "TKQ"
+import pymysql
+
+conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='', db='tkq1')
+cursor = conn.cursor()
+cursor.execute("select * from tb7")
+
+# 获取剩余结果的第一行数据
+row_1 = cursor.fetchone()
+print row_1
+# 获取剩余结果前n行数据
+# row_2 = cursor.fetchmany(3)
+
+# 获取剩余结果所有数据
+# row_3 = cursor.fetchall()
+
+conn.commit()
+cursor.close()
+conn.close()</pre>
+</div>
+<p><strong>3、获取新创建数据自增ID</strong></p>
+<p>可以获取到最新自增的ID，也就是最后插入的一条数据ID</p>
+<div class="jb51code">
+<pre class="brush:py;">
+#! /usr/bin/env python
+# -*- coding:utf-8 -*-
+# __author__ = "TKQ"
+import pymysql
+
+conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='', db='tkq1')
+cursor = conn.cursor()
+effect_row = cursor.executemany("insert into tb7(user,pass,licnese)values(%s,%s,%s)", [("u3","u3pass","11113"),("u4","u4pass","22224")])
+conn.commit()
+cursor.close()
+conn.close()
+#获取自增id
+new_id = cursor.lastrowid      
+print new_id</pre>
+</div>
+<p><strong>4、移动游标</strong></p>
+<p>操作都是靠游标，那对游标的控制也是必须的</p>
+<div class="jb51code">
+<pre class="brush:py;">
+注：在fetch数据时按照顺序进行，可以使用cursor.scroll(num,mode)来移动游标位置，如：
+
+cursor.scroll(1,mode='relative') # 相对当前位置移动
+cursor.scroll(2,mode='absolute') # 相对绝对位置移动</pre>
+</div>
+<p>&nbsp;</p>
+<p><strong>5、fetch数据类型</strong></p>
+<p>关于默认获取的数据是元祖类型，如果想要或者字典类型的数据，即：</p>
+<div class="jb51code">
+<pre class="brush:py;">
+#! /usr/bin/env python
+# -*- coding:utf-8 -*-
+# __author__ = "TKQ"
+import pymysql
+
+conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='', db='tkq1')
+#游标设置为字典类型
+cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
+cursor.execute("select * from tb7")
+
+row_1 = cursor.fetchone()
+print row_1　　#{u'licnese': 213, u'user': '123', u'nid': 10, u'pass': '213'}
+
+conn.commit()
+cursor.close()
+conn.close()</pre>
+</div>
+<p><strong>6、调用存储过程</strong></p>
+<p>a、调用无参存储过程</p>
+<div class="jb51code">
+<pre class="brush:py;">
+#! /usr/bin/env python
+# -*- coding:utf-8 -*-
+# __author__ = "TKQ"
+
+import pymysql
+
+conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='', db='tkq1')
+#游标设置为字典类型
+cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
+#无参数存储过程
+cursor.callproc('p2')  #等价于cursor.execute("call p2()")
+
+row_1 = cursor.fetchone()
+print row_1
+
+
+conn.commit()
+cursor.close()
+conn.close()</pre>
+</div>
+<p>b、调用有参存储过程</p>
+<div class="jb51code">
+<pre class="brush:py;">
+#! /usr/bin/env python
+# -*- coding:utf-8 -*-
+# __author__ = "TKQ"
+
+import pymysql
+
+conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='', db='tkq1')
+cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
+
+cursor.callproc('p1', args=(1, 22, 3, 4))
+#获取执行完存储的参数,参数@开头
+cursor.execute("select @p1,@_p1_1,@_p1_2,@_p1_3")  #{u'@_p1_1': 22, u'@p1': None, u'@_p1_2': 103, u'@_p1_3': 24}
+row_1 = cursor.fetchone()
+print row_1
+
+
+conn.commit()
+cursor.close()
+conn.close()</pre>
+</div>
+<p><span style="color: #ff0000"><strong>三、关于pymysql防注入</strong></span></p>
+<p><strong>&nbsp;1、字符串拼接查询，造成注入</strong></p>
+<p>正常查询语句：</p>
+<div class="jb51code">
+<pre class="brush:py;">
+#! /usr/bin/env python
+# -*- coding:utf-8 -*-
+# __author__ = "TKQ"
+import pymysql
+
+conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='', db='tkq1')
+cursor = conn.cursor()
+user="u1"
+passwd="u1pass"
+#正常构造语句的情况
+sql="select user,pass from tb7 where user='%s' and pass='%s'" % (user,passwd)
+#sql=select user,pass from tb7 where user='u1' and pass='u1pass'
+row_count=cursor.execute(sql) row_1 = cursor.fetchone()
+print row_count,row_1
+
+conn.commit()
+cursor.close()
+conn.close()</pre>
+</div>
+<p>构造注入语句：</p>
+<div class="jb51code">
+<pre class="brush:py;">
+#! /usr/bin/env python
+# -*- coding:utf-8 -*-
+# __author__ = "TKQ"
+import pymysql
+
+conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='', db='tkq1')
+cursor = conn.cursor()
+
+user="u1' or '1'-- "
+passwd="u1pass"
+sql="select user,pass from tb7 where user='%s' and pass='%s'" % (user,passwd)
+
+#拼接语句被构造成下面这样，永真条件，此时就注入成功了。因此要避免这种情况需使用pymysql提供的参数化查询。
+#select user,pass from tb7 where user='u1' or '1'-- ' and pass='u1pass'
+
+row_count=cursor.execute(sql)
+row_1 = cursor.fetchone()
+print row_count,row_1
+
+
+conn.commit()
+cursor.close()
+conn.close()</pre>
+</div>
+<p>&nbsp;</p>
+<p><strong>&nbsp;2、避免注入，使用pymysql提供的参数化语句</strong></p>
+<p>正常参数化查询</p>
+<div class="jb51code">
+<pre class="brush:py;">
+#! /usr/bin/env python
+# -*- coding:utf-8 -*-
+# __author__ = "TKQ"
+
+import pymysql
+
+conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='', db='tkq1')
+cursor = conn.cursor()
+user="u1"
+passwd="u1pass"
+#执行参数化查询
+row_count=cursor.execute("select user,pass from tb7 where user=%s and pass=%s",(user,passwd))
+row_1 = cursor.fetchone()
+print row_count,row_1
+
+conn.commit()
+cursor.close()
+conn.close()</pre>
+</div>
+<p>构造注入，参数化查询注入失败。</p>
+<div class="jb51code">
+<pre class="brush:py;">
+#! /usr/bin/env python
+# -*- coding:utf-8 -*-
+# __author__ = "TKQ"
+import pymysql
+
+conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='', db='tkq1')
+cursor = conn.cursor()
+
+user="u1' or '1'-- "
+passwd="u1pass"
+#执行参数化查询
+row_count=cursor.execute("select user,pass from tb7 where user=%s and pass=%s",(user,passwd))
+#内部执行参数化生成的SQL语句，对特殊字符进行了加\转义，避免注入语句生成。
+# sql=cursor.mogrify("select user,pass from tb7 where user=%s and pass=%s",(user,passwd))
+# print sql
+#select user,pass from tb7 where user='u1\' or \'1\'-- ' and pass='u1pass'被转义的语句。
+
+row_1 = cursor.fetchone()
+print row_count,row_1
+
+conn.commit()
+cursor.close()
+conn.close()</pre>
+</div>
+<p>结论：excute执行SQL语句的时候，必须使用参数化的方式，否则必然产生SQL注入漏洞。</p>
+<p><strong>3、使用存mysql储过程动态执行SQL防注入</strong></p>
+<p>使用MYSQL存储过程自动提供防注入，动态传入SQL到存储过程执行语句。</p>
+<div class="jb51code">
+<pre class="brush:py;">
+delimiter \\
+DROP PROCEDURE IF EXISTS proc_sql \\
+CREATE PROCEDURE proc_sql (
+  in nid1 INT,
+  in nid2 INT,
+  in callsql VARCHAR(255)
+  )
+BEGIN
+  set @nid1 = nid1;
+  set @nid2 = nid2;
+  set @callsql = callsql;
+    PREPARE myprod FROM @callsql;
+--   PREPARE prod FROM 'select * from tb2 where nid&gt;&#63; and nid&lt;&#63;';  传入的值为字符串，？为占位符
+--   用@p1，和@p2填充占位符
+    EXECUTE myprod USING @nid1,@nid2;
+  DEALLOCATE prepare myprod;
+
+END\\
+delimiter ;</pre>
+</div>
+<div class="jb51code">
+<pre class="brush:py;">
+set @nid1=12;
+set @nid2=15;
+set @callsql = 'select * from tb7 where nid&gt;&#63; and nid&lt;&#63;';
+CALL proc_sql(@nid1,@nid2,@callsql)</pre>
+</div>
+<p>pymsql中调用</p>
+<div class="jb51code">
+<pre class="brush:py;">
+#! /usr/bin/env python
+# -*- coding:utf-8 -*-
+# __author__ = "TKQ"
+import pymysql
+
+conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='', db='tkq1')
+cursor = conn.cursor()
+mysql="select * from tb7 where nid&gt;&#63; and nid&lt;&#63;"
+cursor.callproc('proc_sql', args=(11, 15, mysql))
+
+rows = cursor.fetchall()
+print rows #((12, 'u1', 'u1pass', 11111), (13, 'u2', 'u2pass', 22222), (14, 'u3', 'u3pass', 11113))
+conn.commit()
+cursor.close()
+conn.close()</pre>
+</div>
+<p><span style="color: #ff0000"><strong>四、使用with简化连接过程</strong></span></p>
+<p>每次都连接关闭很麻烦，使用上下文管理，简化连接过程</p>
+<div class="jb51code">
+<pre class="brush:py;">
+#! /usr/bin/env python
+# -*- coding:utf-8 -*-
+# __author__ = "TKQ"
+
+import pymysql
+import contextlib
+#定义上下文管理器，连接后自动关闭连接
+@contextlib.contextmanager
+def mysql(host='127.0.0.1', port=3306, user='root', passwd='', db='tkq1',charset='utf8'):
+  conn = pymysql.connect(host=host, port=port, user=user, passwd=passwd, db=db, charset=charset)
+  cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
+  try:
+    yield cursor
+  finally:
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+# 执行sql
+with mysql() as cursor:
+  print(cursor)
+  row_count = cursor.execute("select * from tb7")
+  row_1 = cursor.fetchone()
+  print row_count, row_1</pre>
+</div>
+<p><span style="color: #ff0000"><strong>总结</strong></span></p>
+<p>以上就是关于Python中pymysql模块的全部内容，希望对大家学习或使用python能有一定的帮助，如果有疑问大家可以留言交流。</p>
+
+</div><!--endmain-->
+<div class="art_xg">
+<h4>您可能感兴趣的文章:</h4><ul><li><a href="/article/57290.htm" title="python中MySQLdb模块用法实例" target="_blank">python中MySQLdb模块用法实例</a></li><li><a href="/article/42870.htm" title="python Django连接MySQL数据库做增删改查" target="_blank">python Django连接MySQL数据库做增删改查</a></li><li><a href="/article/34102.htm" title="Python操作Mysql实例代码教程在线版(查询手册)" target="_blank">Python操作Mysql实例代码教程在线版(查询手册)</a></li><li><a href="/article/58921.htm" title="MySQL-Python安装问题小记" target="_blank">MySQL-Python安装问题小记</a></li><li><a href="/article/76231.htm" title="Python操作MySQL数据库9个实用实例" target="_blank">Python操作MySQL数据库9个实用实例</a></li><li><a href="/article/45077.htm" title="python连接mysql数据库示例(做增删改操作)" target="_blank">python连接mysql数据库示例(做增删改操作)</a></li><li><a href="/article/56086.htm" title="python操作mysql中文显示乱码的解决方法" target="_blank">python操作mysql中文显示乱码的解决方法</a></li><li><a href="/article/54166.htm" title="Python中让MySQL查询结果返回字典类型的方法" target="_blank">Python中让MySQL查询结果返回字典类型的方法</a></li><li><a href="/article/71142.htm" title="使用Python操作MySQL的一些基本方法" target="_blank">使用Python操作MySQL的一些基本方法</a></li><li><a href="/article/116970.htm" title="python3.4用函数操作mysql5.7数据库" target="_blank">python3.4用函数操作mysql5.7数据库</a></li></ul>
+</div>
+<div class="lbd clearfix">
+<span id="art_down" class="jbTestPos"></span>
+</div>
+<div id="shoucang"></div>
+<div class="tags mt10">
+<strong>Tags：</strong><a href="http://common.jb51.net/tag/python/1.htm" target="_blank" title="搜索关于python的文章">python</a> <a href="http://common.jb51.net/tag/mysql/1.htm" target="_blank" title="搜索关于mysql的文章">mysql</a> <a href="http://common.jb51.net/tag/pymysql/1.htm" target="_blank" title="搜索关于pymysql的文章">pymysql</a> 
+</div>
+<DIV class="relatedarticle clearfix mt5">
+<H2>相关文章</H2>
+<ul><li><span>2013-02-02</span><a href="/article/34012.htm" title="centos下更新Python版本的步骤" target="_blank">centos下更新Python版本的步骤</a></li><li><span>2014-03-03</span><a href="/article/47994.htm" title="Python break语句详解" target="_blank">Python break语句详解</a></li><li><span>2016-07-07</span><a href="/article/88371.htm" title="Python中的异常处理相关语句基础学习笔记" target="_blank">Python中的异常处理相关语句基础学习笔记</a></li><li><span>2014-08-08</span><a href="/article/54474.htm" title="Python中optionParser模块的使用方法实例教程" target="_blank">Python中optionParser模块的使用方法实例教程</a></li><li><span>2015-03-03</span><a href="/article/63103.htm" title="在树莓派2或树莓派B+上安装Python和OpenCV的教程" target="_blank">在树莓派2或树莓派B+上安装Python和OpenCV的教程</a></li><li><span>2016-04-04</span><a href="/article/82562.htm" title="Python实现递归遍历文件夹并删除文件" target="_blank">Python实现递归遍历文件夹并删除文件</a></li><li><span>2014-08-08</span><a href="/article/54184.htm" title="Python实现的石头剪子布代码分享" target="_blank">Python实现的石头剪子布代码分享</a></li><li><span>2015-05-05</span><a href="/article/66539.htm" title="python实现读取命令行参数的方法" target="_blank">python实现读取命令行参数的方法</a></li><li><span>2015-06-06</span><a href="/article/67211.htm" title="Python守护进程用法实例分析" target="_blank">Python守护进程用法实例分析</a></li><li><span>2015-03-03</span><a href="/article/62320.htm" title="使用Python抓取模板之家的CSS模板" target="_blank">使用Python抓取模板之家的CSS模板</a></li></ul>
+</DIV>
+<div class="lbd clearfix mt5">
+<span id="art_down2" class="jbTestPos"></span>
+</div>
+<a href="#comments"></a>
+<div id="comments">
+<H2>最新评论</H2>
+<div class="pd5"><div id="SOHUCS" sid="art_92516"></div></div>
+</div>
+      </div><!--endborder-->
+      </div><!--end fl-->
+      
+<div class="w300 fr">
+<div class="r300 clearfix"><span id="side_up" class="jbTestPos"></span></div>
+<DIV class="tabTitleBar mt10 bgf borderTblue">
+<DIV class="borderTnone pb10 YaHei">
+<H4 class="blue">大家感兴趣的内容</H4>
+<UL class="newsList newList-in">
+<li><EM class="no1">1</EM><a href="/article/926.htm" title="Python入门教程 超详细1小时学会Python" target="_blank">Python入门教程 超详细1小时学会</a></li><li><EM class="no2">2</EM><a href="/article/26543.htm" title="python 中文乱码问题深入分析" target="_blank">python 中文乱码问题深入分析</a></li><li><EM class="no3">3</EM><a href="/article/47978.htm" title="Python 列表(List)操作方法详解" target="_blank">Python 列表(List)操作方法详解</a></li><li><EM class="no4">4</EM><a href="/article/37287.htm" title="python strip()函数 介绍" target="_blank">python strip()函数 介绍</a></li><li><EM class="no5">5</EM><a href="/article/50689.htm" title="pycharm 使用心得（一）安装和首次使用" target="_blank">pycharm 使用心得（一）安装和首</a></li><li><EM class="no6">6</EM><a href="/article/47990.htm" title="Python 字典(Dictionary)操作详解" target="_blank">Python 字典(Dictionary)操作详解</a></li><li><EM class="no7">7</EM><a href="/article/15707.htm" title="比较详细Python正则表达式操作指南(re使用)" target="_blank">比较详细Python正则表达式操作指</a></li><li><EM class="no8">8</EM><a href="/article/51651.htm" title="Python科学计算环境推荐——Anaconda" target="_blank">Python科学计算环境推荐——Anac</a></li><li><EM class="no9">9</EM><a href="/article/47986.htm" title="Python 元组(Tuple)操作详解" target="_blank">Python 元组(Tuple)操作详解</a></li><li><EM class="no10">10</EM><a href="/article/17560.htm" title="Python字符串的encode与decode研究心得乱码问题解决方法" target="_blank">Python字符串的encode与decode研</a></li>
+</UL>
+</DIV>
+</DIV>
+<div class="r300 clearfix mt10"><span id="idctu" class="jbTestPos"></span></div>
+<DIV class="tabTitleBar mt10 bgf borderTblue">
+<DIV class="borderTnone pb10 YaHei">
+<H4 class="blue">最近更新的内容</H4>
+<UL class="newsListA">
+<ul><li><a href="/article/64259.htm" title="在Python下利用OpenCV来旋转图像的教程" target="_blank">在Python下利用OpenCV来旋转图像的教程</a></li><li><a href="/article/66440.htm" title="Python中subprocess模块用法实例详解" target="_blank">Python中subprocess模块用法实例详解</a></li><li><a href="/article/79369.htm" title="Python在Console下显示文本进度条的方法" target="_blank">Python在Console下显示文本进度条的方法</a></li><li><a href="/article/51051.htm" title="Python对两个有序列表进行合并和排序的例子" target="_blank">Python对两个有序列表进行合并和排序的例</a></li><li><a href="/article/95728.htm" title="python解决网站的反爬虫策略总结" target="_blank">python解决网站的反爬虫策略总结</a></li><li><a href="/article/65360.htm" title="简单介绍Python中利用生成器实现的并发编程" target="_blank">简单介绍Python中利用生成器实现的并发编</a></li><li><a href="/article/45438.htm" title="python实现2014火车票查询代码分享" target="_blank">python实现2014火车票查询代码分享</a></li><li><a href="/article/76064.htm" title="一波神奇的Python语句、函数与方法的使用技巧总结" target="_blank">一波神奇的Python语句、函数与方法的使用</a></li><li><a href="/article/109172.htm" title="Python多线程经典问题之乘客做公交车算法实例" target="_blank">Python多线程经典问题之乘客做公交车算法</a></li><li><a href="/article/111917.htm" title="fastcgi文件读取漏洞之python扫描脚本" target="_blank">fastcgi文件读取漏洞之python扫描脚本</a></li></ul>
+</UL>
+</DIV>
+</DIV>   
+<div class="r300 clearfix mt10"><span id="idctu1" class="jbTestPos"></span></div>
+<DIV class="tabTitleBar mt10 bgf borderTblue">
+<DIV class="borderTnone pb10 YaHei">
+<H4 class="blue">常用在线小工具</H4>
+<ul class="newsListA"><span id="bctools" class="jbTestPos"></span></ul>
+</DIV>
+</DIV>
+<div class="r300 clearfix mt10" id="idctu2"><span id="idctu2" class="jbTestPos"></span></div>
+<div class="mt10 rFixedBox">
+<span id="r_2" class="jbTestPos"></span>
+</div>
+      
+      
+      </div><!--end fr-->
+      </div>
+</div><!--end content-->
+<div id="footer">
+<div class="main clearfix">
+<p>
+<a href="http://www.jb51.net/about.htm" target="_blank">关于我们</a> - 
+<a href="http://www.jb51.net/support.htm" target="_blank">广告合作</a> - 
+<a href="http://www.jb51.net/linkus.htm" target="_blank">联系我们</a> -  
+<a href="http://www.jb51.net/sm.htm" target="_blank">免责声明</a> -  
+<a href="http://www.jb51.net/sitemap.htm" target="_blank">网站地图</a> - 
+<a href="tencent://message/?uin=461478385&Site=http://www.jb51.net" target="_blank">投诉建议</a> - 
+<a href="http://www.jb51.net/up.htm" target="_blank">在线投稿</a>
+</p>
+<p>&copy;CopyRight 2006-2017 JB51.Net Inc All Rights Reserved. 脚本之家 版权所有</p>
+</div>
+</div><!--end footer-->
+<link type="text/css" rel="stylesheet" href="/jslib/syntaxhighlighter/styles/shCore.css" />
+<link type="text/css" rel="Stylesheet" href="/jslib/syntaxhighlighter/styles/shThemeDefault.css" />
+<script type="text/javascript" src="/jslib/syntaxhighlighter/scripts/shCore.js"></script>
+<script type="text/javascript" src="/jslib/syntaxhighlighter/scripts/shAutoloader.js"></script>
+<script type="text/javascript">
+(function(){
+    var bp = document.createElement('script');
+    bp.src = '//push.zhanzhang.baidu.com/push.js';
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+if (top.location != self.location)top.location=self.location;
+$(function(){
+	$('#content').find('img').each(function(){
+        var img = this;
+        if (img.width >= 650){
+            img.style.width = "650px";
+            img.style.height = "auto";
+            //$(img).removeAttr('height');
+            var aTag = document.createElement('a');
+            aTag.href = img.src;
+			aTag.target="_blank";
+            $(aTag).addClass('bPic')
+            .insertAfter(img).append(img)
+          }
+    });
+	$(window).scroll(function()
+    {	
+    	//rFixedBox跟随滚动
+    	var h = $(window).height();
+        var top = $(window).scrollTop();
+    	var rFixedBox = $('.rFixedBox').prev().offset();
+        var fixedTop = rFixedBox.top;
+		
+        if(top>=fixedTop+344)
+        {
+			var h1 = parseInt($('#content').children('.main').height());
+			if(parseInt(top) + 340 < h1){
+				$('.rFixedBox').css({'position':'fixed','top': 0});
+			}else{
+				$('.rFixedBox').css({'position':'absolute','top': h1-510});
+			}
+        }
+        else
+        {
+            $('.rFixedBox').css({'position':'static', 'top':0});   
+        }	
+       /* return true;*/
+    });
+/*$(document).ready(function() {
+  $("#content img").unveil();
+});	*/
+SyntaxHighlighter.autoloader(
+	'applescript			/jslib/syntaxhighlighter/scripts/shBrushAppleScript.js',
+	'actionscript3 as3		/jslib/syntaxhighlighter/scripts/shBrushAS3.js',
+	'bash shell				/jslib/syntaxhighlighter/scripts/shBrushBash.js',
+	'coldfusion cf			/jslib/syntaxhighlighter/scripts/shBrushColdFusion.js',
+	'cpp c					/jslib/syntaxhighlighter/scripts/shBrushCpp.js',
+	'obj-c objc				/jslib/syntaxhighlighter/scripts/shBrushObjC.js',
+	'c# c-sharp csharp		/jslib/syntaxhighlighter/scripts/shBrushCSharp.js',
+	'css					/jslib/syntaxhighlighter/scripts/shBrushCss.js',
+	'delphi pascal			/jslib/syntaxhighlighter/scripts/shBrushDelphi.js',
+	'diff patch pas			/jslib/syntaxhighlighter/scripts/shBrushDiff.js',
+	'erl erlang				/jslib/syntaxhighlighter/scripts/shBrushErlang.js',
+	'groovy					/jslib/syntaxhighlighter/scripts/shBrushGroovy.js',
+	'haxe hx				/jslib/syntaxhighlighter/scripts/shBrushHaxe.js',
+	'java					/jslib/syntaxhighlighter/scripts/shBrushJava.js',
+	'jfx javafx				/jslib/syntaxhighlighter/scripts/shBrushJavaFX.js',
+	'js jscript javascript	/jslib/syntaxhighlighter/scripts/shBrushJScript.js',
+	'perl pl				/jslib/syntaxhighlighter/scripts/shBrushPerl.js',
+	'php					/jslib/syntaxhighlighter/scripts/shBrushPhp.js',
+	'text plain				/jslib/syntaxhighlighter/scripts/shBrushPlain.js',
+	'py python				/jslib/syntaxhighlighter/scripts/shBrushPython.js',
+	'ruby rails ror rb		/jslib/syntaxhighlighter/scripts/shBrushRuby.js',
+	'scala					/jslib/syntaxhighlighter/scripts/shBrushScala.js',
+	'sql					/jslib/syntaxhighlighter/scripts/shBrushSql.js',
+	'vb vbnet				/jslib/syntaxhighlighter/scripts/shBrushVb.js',
+	'ps powershell			/jslib/syntaxhighlighter/scripts/shBrushPowerShell.js',
+	'xml xhtml xslt html	/jslib/syntaxhighlighter/scripts/shBrushXml.js'
+);
+SyntaxHighlighter.all();
+});
+var ourl="";
+</script>
+<script type="text/javascript" src='http://common.jb51.net/js/jbLoader.js'></script>
+<script>jbLoader();</script><script class="closetag">jbLoader(true);</script>
+<script>jbLoader();</script><script class="closetag">jbLoader(true);</script>
+<script>jbLoader();</script><script class="closetag">jbLoader(true);</script>
+<script>jbLoader();</script><script class="closetag">jbLoader(true);</script>
+<script>jbLoader();</script><script class="closetag">jbLoader(true);</script>
+<script>jbLoader();</script><script class="closetag">jbLoader(true);</script>
+<script>jbLoader();</script><script class="closetag">jbLoader(true);</script>
+<script>jbLoader();</script><script class="closetag">jbLoader(true);</script>
+<script>jbLoader();</script><script class="closetag">jbLoader(true);</script>
+<script>jbLoader();</script><script class="closetag">jbLoader(true);</script>
+<script>jbLoader();</script><script class="closetag">jbLoader(true);</script>
+<script>jbLoader();</script><script class="closetag">jbLoader(true);</script>
+<div id="tongji">
+<script type="text/javascript" src="http://common.jb51.net/inc/tongji.js"></script>
+<script charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+window.changyan.api.config({
+appid: 'cyrHH3dwi',
+conf: 'prod_1dc5dc80970106099d43fe242b7465fc'
+});
+</script>
+</div>
+<script type="text/javascript" src="http://www.jb51.net/pl.asp?id=92516"></script>
+</body>
+</html>
+<!-- published at 2017/6/23 7:52:32By dxycms qq:461478385  -->
